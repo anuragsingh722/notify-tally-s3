@@ -1,0 +1,33 @@
+service: notify-tally-s3
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: ap-south-1
+
+
+functions:
+  notify_file_push:
+    handler: handler.notify_file_push
+    events:
+      - s3:
+          bucket: motoezzy-analytics-invoices
+          event: s3:ObjectCreated:*
+          existing: true
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!venv38/**'
+    - '!env/**'
+    - '!node_modules/**'
+    - '!package.json'
+    - '!package-lock.json'
+    - '!**__pycache__**'
+    - '!.idea'
+
+
+plugins:
+  - serverless-python-requirements
